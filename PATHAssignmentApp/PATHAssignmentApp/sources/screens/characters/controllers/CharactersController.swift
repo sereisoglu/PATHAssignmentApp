@@ -40,12 +40,16 @@ final class CharactersController: UITableViewController {
         let controller = UISearchController(searchResultsController: nil)
         controller.searchBar.placeholder = "Search for characters"
         controller.obscuresBackgroundDuringPresentation = false
+        controller.searchBar.delegate = self
         return controller
     }()
     
-    init() {
-        viewModel = CharactersViewModel()
-        searchResultsViewModel = CharactersSearchResultsViewModel()
+    init(
+        viewModel: CharactersViewModel,
+        searchResultsViewModel: CharactersSearchResultsViewModel
+    ) {
+        self.viewModel = viewModel
+        self.searchResultsViewModel = searchResultsViewModel
         
         super.init(style: .grouped)
     }
@@ -54,6 +58,8 @@ final class CharactersController: UITableViewController {
         super.viewDidLoad()
         
         navigationItem.title = "Characters"
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
         navigationController?.navigationBar.prefersLargeTitles = true
         
         view.backgroundColor = Color.backgroundDefault.value
@@ -68,10 +74,6 @@ final class CharactersController: UITableViewController {
         tableView.keyboardDismissMode = .interactive
         tableView.separatorStyle = .none
         
-        navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
-        searchController.searchBar.delegate = self
-        
         viewModel.delegate = self
         searchResultsViewModel.delegate = self
         
@@ -82,91 +84,6 @@ final class CharactersController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
-extension CharactersController: CharactersViewModelDelegate {
-    func getDataForCharactersViewModel(error: ErrorModel?) {
-        guard state == .default else {
-            return
-        }
-        
-        guard error == nil else {
-            print(error?.message ?? "")
-            
-            AlertControllerUtility.present(
-                title: error?.title ?? "API Error",
-                message: error?.message ?? "An error has occurred.",
-                delegate: self
-            )
-            
-            tableView.reloadData()
-            
-            return
-        }
-        
-        tableView.separatorStyle = viewModelState == .data ? .singleLine : .none
-        
-        tableView.reloadData()
-    }
-}
-
-extension CharactersController: CharactersSearchResultsViewModelDelegate {
-    func getDataForCharactersSearchResultsViewModel(error: ErrorModel?) {
-        guard state == .search else {
-            return
-        }
-        
-        guard error == nil else {
-            print(error?.message ?? "")
-
-            AlertControllerUtility.present(
-                title: error?.title ?? "API Error",
-                message: error?.message ?? "An error has occurred.",
-                delegate: self
-            )
-
-            tableView.reloadData()
-
-            return
-        }
-
-        tableView.separatorStyle = viewModelState == .data ? .singleLine : .none
-
-        tableView.reloadData()
-    }
-}
-
-// MARK: - UISearchBarDelegate
-
-extension CharactersController: UISearchBarDelegate {
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let text = searchBar.text else {
-            return
-        }
-        
-        state = .search
-        
-        tableView.separatorStyle = .none
-        
-        searchResultsViewModel.fetchData(query: text)
-        
-        tableView.reloadData()
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        state = .default
-        
-        searchResultsViewModel.reset()
-        
-        tableView.reloadData()
-    }
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText == "" {
-            searchBarCancelButtonClicked(searchBar)
-        }
-    }
-}
-
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
 
@@ -282,6 +199,94 @@ extension CharactersController {
             viewModel.fetchDataForPagination()
         case .search:
             searchResultsViewModel.fetchDataForPagination()
+        }
+    }
+}
+
+// MARK: - CharactersViewModelDelegate
+
+extension CharactersController: CharactersViewModelDelegate {
+    func getDataForCharactersViewModel(error: ErrorModel?) {
+        guard state == .default else {
+            return
+        }
+        
+        guard error == nil else {
+            print(error?.message ?? "")
+            
+            AlertControllerUtility.present(
+                title: error?.title ?? "API Error",
+                message: error?.message ?? "An error has occurred.",
+                delegate: self
+            )
+            
+            tableView.reloadData()
+            
+            return
+        }
+        
+        tableView.separatorStyle = viewModelState == .data ? .singleLine : .none
+        
+        tableView.reloadData()
+    }
+}
+
+// MARK: - CharactersSearchResultsViewModelDelegate
+
+extension CharactersController: CharactersSearchResultsViewModelDelegate {
+    func getDataForCharactersSearchResultsViewModel(error: ErrorModel?) {
+        guard state == .search else {
+            return
+        }
+        
+        guard error == nil else {
+            print(error?.message ?? "")
+
+            AlertControllerUtility.present(
+                title: error?.title ?? "API Error",
+                message: error?.message ?? "An error has occurred.",
+                delegate: self
+            )
+
+            tableView.reloadData()
+
+            return
+        }
+
+        tableView.separatorStyle = viewModelState == .data ? .singleLine : .none
+
+        tableView.reloadData()
+    }
+}
+
+// MARK: - UISearchBarDelegate
+
+extension CharactersController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let text = searchBar.text else {
+            return
+        }
+        
+        state = .search
+        
+        tableView.separatorStyle = .none
+        
+        searchResultsViewModel.fetchData(query: text)
+        
+        tableView.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        state = .default
+        
+        searchResultsViewModel.reset()
+        
+        tableView.reloadData()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText == "" {
+            searchBarCancelButtonClicked(searchBar)
         }
     }
 }

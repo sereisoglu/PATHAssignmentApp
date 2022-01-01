@@ -16,7 +16,11 @@ final class CharactersCoordinator: Coordinator {
     }
     
     func start() {
-        let viewController = CharactersController()
+        let viewController = CharactersController(
+            viewModel: CharactersViewModel(),
+            searchResultsViewModel: CharactersSearchResultsViewModel()
+        )
+        viewController.state
         viewController.tabBarItem.image = Icon.person3.value
         viewController.tabBarItem.selectedImage = Icon.person3Fill.value
         viewController.title = "Characters"

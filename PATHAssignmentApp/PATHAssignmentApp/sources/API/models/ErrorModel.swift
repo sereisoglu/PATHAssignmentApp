@@ -10,7 +10,7 @@ import Foundation
 public struct ErrorModel: Decodable, Error {
     public var title: String?
     
-    public var code: Int?
+    public var code: String?
     public var message: String?
     
     enum CodingKeys: String, CodingKey {

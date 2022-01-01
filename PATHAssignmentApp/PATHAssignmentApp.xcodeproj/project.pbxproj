@@ -283,6 +283,7 @@
 				4A48C516277E62D1007487A0 /* main */,
 				4A48C50F277E60E6007487A0 /* characters */,
 				4A48C510277E60F8007487A0 /* favorites */,
+				4A600E962780995E00C3FFC4 /* charactersDetail */,
 			);
 			path = screens;
 			sourceTree = "<group>";
@@ -385,6 +386,13 @@
 				4A48C517277E6309007487A0 /* CharactersCoordinator.swift */,
 			);
 			path = coordinators;
+			sourceTree = "<group>";
+		};
+		4A600E962780995E00C3FFC4 /* charactersDetail */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = charactersDetail;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
