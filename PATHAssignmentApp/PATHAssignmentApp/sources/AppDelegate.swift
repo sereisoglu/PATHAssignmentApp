@@ -15,6 +15,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow()
         window?.makeKeyAndVisible()
         
+        MarvelAPI.shared.setUp(
+            publicKey: "",
+            privateKey: "",
+            pageLimit: 30
+        )
+        
         window?.rootViewController = TabBarController()
         
         return true
