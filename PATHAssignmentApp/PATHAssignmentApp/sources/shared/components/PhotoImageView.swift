@@ -9,7 +9,10 @@ import UIKit
 import Nuke
 
 final class PhotoImageView: UIImageView {
-    init() {
+    init(
+        cornerRadius: CGFloat = 10,
+        borderWidth: CGFloat = .zero
+    ) {
         super.init(frame: .zero)
         
         backgroundColor = Color.fillPrimary.value
@@ -20,19 +23,18 @@ final class PhotoImageView: UIImageView {
         }
         clipsToBounds = true
         
-        layer.borderWidth = 2
+        layer.borderWidth = borderWidth
         layer.borderColor = Color.tintPrimary.value.withAlphaComponent(0.25).cgColor
-        frame = frame.insetBy(dx: -2, dy: -2)
+        frame = frame.insetBy(dx: -borderWidth, dy: -borderWidth)
         
         contentMode = .scaleAspectFill
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-       if #available(iOS 13.0, *) {
-           if (traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection)) {
-               layer.borderColor = Color.tintPrimary.value.withAlphaComponent(0.25).cgColor
-           }
-       }
+        if #available(iOS 13.0, *),
+           traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            layer.borderColor = Color.tintPrimary.value.withAlphaComponent(0.25).cgColor
+        }
     }
     
     func setData(imageUrl: String?) {

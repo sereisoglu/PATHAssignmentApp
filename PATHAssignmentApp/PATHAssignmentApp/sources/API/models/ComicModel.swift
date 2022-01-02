@@ -6,3 +6,21 @@
 //
 
 import Foundation
+
+struct ComicModel: Decodable {
+    var id: Int?
+    var thumbnail: ThumbnailModel?
+    var title: String?
+    var description: String?
+    var pageCount: Int?
+    var urls: [URLModel]?
+    var dates: [DateModel]?
+    
+    var url: String? {
+        urls?.first(where: { $0.type == "detail" })?.url
+    }
+    
+    var date: String? {
+        dates?.first(where: { $0.type == "onsaleDate" })?.date
+    }
+}

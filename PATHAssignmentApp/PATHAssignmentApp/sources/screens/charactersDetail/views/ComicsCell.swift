@@ -1,33 +1,29 @@
 //
-//  CharactersCell.swift
+//  ComicsCell.swift
 //  PATHAssignmentApp
 //
-//  Created by Saffet Emin Reisoğlu on 31.12.2021.
+//  Created by Saffet Emin Reisoğlu on 1.01.2022.
 //
 
 import UIKit
 import LBTATools
 
-final class CharactersCell: UITableViewCell {
-    private let photoImageView = PhotoImageView(cornerRadius: 8, borderWidth: 1)
+final class ComicsCell: UITableViewCell {
+    private let photoImageView = PhotoImageView(cornerRadius: 6, borderWidth: 1)
     private let nameLabel = Label(text: nil, type: .body1, weight: .bold, color: .tintPrimary, numberOfLines: 0)
     private let descriptionLabel = Label(text: nil, type: .body2, weight: .medium, color: .tintSecondary, numberOfLines: 5)
-    private let rightIconView = IconImageView(size: .pt22, icon: .chevronForward, tintColor: .tintTertiary)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        separatorInset = .init(top: 0, left: 16 + 75 + 10, bottom: 0, right: 0)
+        separatorInset = .init(top: 0, left: 16 + 60 + 10, bottom: 0, right: 0)
         
         hstack(
-            photoImageView.withSize(.init(width: 75, height: 75)),
+            photoImageView.withSize(.init(width: 60, height: 90)),
             stack(
                 nameLabel,
                 descriptionLabel
-            ),
-            hstack(
-                rightIconView
-            ).padTop(10), spacing: 10, alignment: .top
+            ), spacing: 10, alignment: .top
         ).withMargins(.linearSides(v: 11, h: 16))
     }
     

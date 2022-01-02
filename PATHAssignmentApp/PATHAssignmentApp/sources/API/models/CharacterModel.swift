@@ -12,13 +12,4 @@ struct CharacterModel: Decodable {
     var thumbnail: ThumbnailModel?
     var name: String?
     var description: String?
-    
-    var imageUrl: String? {
-        guard let path = thumbnail?.path,
-              let `extension` = thumbnail?.extension else {
-            return nil
-        }
-        
-        return "\(path).\(`extension`)"
-    }
 }

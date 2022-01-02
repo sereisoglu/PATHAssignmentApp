@@ -18,6 +18,8 @@ final class CharactersController: UITableViewController {
     private let viewModel: CharactersViewModel
     private let searchResultsViewModel: CharactersSearchResultsViewModel
     
+    private let coordinator: CharactersCoordinator
+    
     private var viewModelState: InformingState {
         switch state {
         case .default:
@@ -46,10 +48,12 @@ final class CharactersController: UITableViewController {
     
     init(
         viewModel: CharactersViewModel,
-        searchResultsViewModel: CharactersSearchResultsViewModel
+        searchResultsViewModel: CharactersSearchResultsViewModel,
+        coordinator: CharactersCoordinator
     ) {
         self.viewModel = viewModel
         self.searchResultsViewModel = searchResultsViewModel
+        self.coordinator = coordinator
         
         super.init(style: .grouped)
     }
@@ -106,7 +110,7 @@ extension CharactersController {
             
             if let item = viewModelData?.items[safe: indexPath.item] {
                 cell.setData(
-                    imageUrl: item.imageUrl,
+                    imageUrl: item.thumbnail?.imageUrl,
                     nameText: item.name ?? "No name",
                     descriptionText: item.description
                 )
@@ -122,6 +126,14 @@ extension CharactersController {
             
             return cell
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let data = viewModelData?.items[safe: indexPath.item] else {
+            return
+        }
+        
+        coordinator.goToDetail(data: data)
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

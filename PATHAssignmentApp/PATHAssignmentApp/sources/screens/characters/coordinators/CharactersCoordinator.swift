@@ -17,13 +17,20 @@ final class CharactersCoordinator: Coordinator {
     
     func start() {
         let viewController = CharactersController(
-            viewModel: CharactersViewModel(),
-            searchResultsViewModel: CharactersSearchResultsViewModel()
+            viewModel: .init(),
+            searchResultsViewModel: .init(),
+            coordinator: self
         )
-        viewController.state
         viewController.tabBarItem.image = Icon.person3.value
         viewController.tabBarItem.selectedImage = Icon.person3Fill.value
         viewController.title = "Characters"
+        navigationController.pushViewController(viewController, animated: true)
+    }
+    
+    func goToDetail(data: CharacterModel) {
+        let viewController = CharactersDetailController(
+            viewModel: .init(data: data)
+        )
         navigationController.pushViewController(viewController, animated: true)
     }
 }
