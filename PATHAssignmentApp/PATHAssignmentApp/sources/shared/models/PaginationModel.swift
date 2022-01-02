@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MarvelAPI
 
 struct PaginationModel<T: Decodable> {
     private(set) var itemCount: Int = 0

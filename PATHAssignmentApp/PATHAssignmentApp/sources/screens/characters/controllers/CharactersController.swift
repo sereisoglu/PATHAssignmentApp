@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MarvelAPI
 
 final class CharactersController: UITableViewController {
     enum State {

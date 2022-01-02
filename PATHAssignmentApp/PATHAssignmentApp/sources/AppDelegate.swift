@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MarvelAPI
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {

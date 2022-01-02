@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct ThumbnailModel: Decodable {
+public struct ThumbnailModel: Decodable {
     var path: String?
     var `extension`: String?
     
-    var imageUrl: String? {
+    public var imageUrl: String? {
         guard let path = path,
               let `extension` = `extension` else {
             return nil
@@ -21,12 +21,12 @@ struct ThumbnailModel: Decodable {
     }
 }
 
-struct DateModel: Decodable {
+public struct DateModel: Decodable {
     var type: String?
     var date: String?
 }
 
-struct URLModel: Decodable {
+public struct URLModel: Decodable {
     var type: String?
     var url: String?
 }

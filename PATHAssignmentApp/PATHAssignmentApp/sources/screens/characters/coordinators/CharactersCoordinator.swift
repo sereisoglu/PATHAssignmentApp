@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MarvelAPI
 
 final class CharactersCoordinator: Coordinator {
     var childCoordinators = [Coordinator]()
