@@ -15,7 +15,7 @@ public final class MarvelAPI {
     let BASE_URL = "https://gateway.marvel.com:443"
     var PUBLIC_KEY = ""
     var PRIVATE_KEY = ""
-    var PAGE_LIMIT = 30
+    public var PAGE_LIMIT = 30
     
     public func setUp(
         publicKey: String,

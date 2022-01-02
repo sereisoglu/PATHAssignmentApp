@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MarvelAPI
 
 protocol CharactersDetailViewModelDelegate: AnyObject {
     func getDataForCharactersDetailViewModel(error: ErrorModel?)

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MarvelAPI
 
 final class CharactersDetailController: UITableViewController {
     private let viewModel: CharactersDetailViewModel
@@ -125,7 +126,7 @@ extension CharactersDetailController {
                     cell.setData(
                         imageUrl: data.thumbnail?.imageUrl,
                         nameText: data.title ?? "No name",
-                        dateText: data.date,
+                        dateText: DateUtility.stringFormat(convertType: .monthAndDayAndYear, dateString: data.date),
                         descriptionText: data.description
                     )
                 }
