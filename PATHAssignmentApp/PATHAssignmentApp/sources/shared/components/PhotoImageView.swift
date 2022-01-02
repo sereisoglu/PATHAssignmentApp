@@ -40,8 +40,6 @@ final class PhotoImageView: UIImageView {
     func setData(imageUrl: String?) {
         guard let imageUrl = imageUrl,
               let url = URL(string: imageUrl) else {
-            isHidden = true
-            
             return
         }
         

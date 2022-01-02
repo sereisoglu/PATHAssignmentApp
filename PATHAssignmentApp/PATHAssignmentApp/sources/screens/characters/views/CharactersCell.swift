@@ -9,26 +9,33 @@ import UIKit
 import LBTATools
 
 final class CharactersCell: UITableViewCell {
+    private let IMAGE_VIEW_SIZE: CGSize = .equalEdge(75)
+    
     private let photoImageView = PhotoImageView(cornerRadius: 8, borderWidth: 1)
-    private let nameLabel = Label(text: nil, type: .body1, weight: .bold, color: .tintPrimary, numberOfLines: 0)
+    private let nameLabel = Label(text: nil, type: .body1, weight: .medium, color: .tintPrimary, numberOfLines: 0)
     private let descriptionLabel = Label(text: nil, type: .body2, weight: .medium, color: .tintSecondary, numberOfLines: 5)
     private let iconView = IconImageView(size: .pt22, icon: .chevronForward, tintColor: .tintTertiary)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        separatorInset = .init(top: 0, left: 16 + 75 + 10, bottom: 0, right: 0)
+        separatorInset = .init(
+            top: 0,
+            left: Space.pt16.value + IMAGE_VIEW_SIZE.width + Space.pt10.value,
+            bottom: 0,
+            right: 0
+        )
         
         hstack(
-            photoImageView.withSize(.init(width: 75, height: 75)),
+            photoImageView.withSize(IMAGE_VIEW_SIZE),
             stack(
                 nameLabel,
                 descriptionLabel
             ),
             hstack(
                 iconView
-            ).padTop(10), spacing: 10, alignment: .top
-        ).withMargins(.linearSides(v: 11, h: 16))
+            ).padTop(Space.pt10.value), spacing: Space.pt10.value, alignment: .top
+        ).withMargins(.linearSides(v: Space.pt11.value, h: Space.pt16.value))
     }
     
     override func prepareForReuse() {

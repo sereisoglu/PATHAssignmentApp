@@ -36,7 +36,7 @@ final class Label: UILabel {
             return
         }
         
-        self.attributedText = .init(string: text, attributes: attributes)
+        attributedText = .init(string: text, attributes: attributes)
     }
     
     func setData(color: Color?) {

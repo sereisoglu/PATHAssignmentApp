@@ -21,24 +21,12 @@ enum Icon: String {
 }
 
 enum IconSize {
-    case pt14
-    case pt18
-    case pt20
     case pt22
-    case pt30
     
     var value: CGSize {
         switch self {
-        case .pt14:
-            return .equalEdge(14)
-        case .pt18:
-            return .equalEdge(18)
-        case .pt20:
-            return .equalEdge(20)
         case .pt22:
             return .equalEdge(22)
-        case .pt30:
-            return .equalEdge(30)
         }
     }
 }

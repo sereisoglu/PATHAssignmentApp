@@ -9,6 +9,8 @@ import UIKit
 import LBTATools
 
 final class CharactersDetailCell: UITableViewCell {
+    private let IMAGE_VIEW_SIZE: CGSize = .equalEdge(120)
+    
     private let photoImageView = PhotoImageView(cornerRadius: 10, borderWidth: 2)
     private let nameLabel = Label(text: nil, type: .title3, weight: .bold, color: .tintPrimary, alignment: .center, numberOfLines: 0)
     private let descriptionLabel = Label(text: nil, type: .body1, weight: .medium, color: .tintSecondary, alignment: .center, numberOfLines: 0)
@@ -16,15 +18,13 @@ final class CharactersDetailCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        separatorInset = .init(top: 0, left: 16 + 80 + 10, bottom: 0, right: 0)
-        
         stack(
-            photoImageView.withSize(.init(width: 120, height: 120)),
+            photoImageView.withSize(IMAGE_VIEW_SIZE),
             stack(
                 nameLabel,
                 descriptionLabel
-            ), spacing: 20, alignment: .center
-        ).withMargins(.linearSides(v: 20, h: 16))
+            ), spacing: Space.pt20.value, alignment: .center
+        ).withMargins(.linearSides(v: Space.pt11.value, h: Space.pt16.value))
     }
     
     override func prepareForReuse() {

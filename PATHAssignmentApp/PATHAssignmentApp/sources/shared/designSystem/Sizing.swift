@@ -7,43 +7,42 @@
 
 import UIKit
 
-struct Sizing {
-    // MARK: - General
+enum CornerRadius {
+    case pt6
+    case pt8
+    case pt10
     
-    static let deviceSize: CGSize = UIScreen.main.bounds.size
-    
-    // MARK: - Column
-    
-    static let oneColumn: CGFloat = deviceSize.width - (Sizing.space16pt + Sizing.space16pt)
-    static let twoColumns: CGFloat = (deviceSize.width - (Sizing.space16pt + Sizing.space12pt + Sizing.space16pt)) / 2
-    
-    // MARK: - Space
-    
-    static let space2pt: CGFloat = 2
-    static let space5pt: CGFloat = 5
-    static let space10pt: CGFloat = 10
-    static let space11pt: CGFloat = 11
-    static let space12pt: CGFloat = 12
-    static let space15pt: CGFloat = 15
-    static let space16pt: CGFloat = 16
-    static let space20pt: CGFloat = 20
-    
-    // MARK: - Corner Radius
-    
-    static let cornerRadius10pt: CGFloat = 10
-    static let cornerRadius12pt: CGFloat = 12
+    var value: CGFloat {
+        switch self {
+        case .pt6:
+            return 6
+        case .pt8:
+            return 8
+        case .pt10:
+            return 10
+        }
+    }
+}
 
-    // MARK: Image View
+enum Space {
+    case pt2
+    case pt10
+    case pt11
+    case pt16
+    case pt20
     
-    static let imageViewAspectRatio: CGFloat = 2 / 3
-    
-    static var imageViewSmall: CGSize = {
-        let height: CGFloat = FontType.body1.value.lineHeight + (2 * FontType.body2.value.lineHeight)
-        return CGSize.init(width: height / imageViewAspectRatio, height: height)
-    }()
-    
-    static var imageViewDetail: CGSize = {
-        let width: CGFloat = Sizing.oneColumn
-        return CGSize.init(width: width, height: width * imageViewAspectRatio)
-    }()
+    var value: CGFloat {
+        switch self {
+        case .pt2:
+            return 2
+        case .pt10:
+            return 10
+        case .pt11:
+            return 11
+        case .pt16:
+            return 16
+        case .pt20:
+            return 20
+        }
+    }
 }

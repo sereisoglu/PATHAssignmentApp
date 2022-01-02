@@ -25,7 +25,7 @@ final class InformingCell: UITableViewCell {
                 headerLabel,
                 stack(
                     messageLabel
-                ).padLeft(Sizing.space20pt).padRight(Sizing.space20pt), spacing: Sizing.space10pt, alignment: .center
+                ).padLeft(Space.pt20.value).padRight(Space.pt20.value), spacing: Space.pt10.value, alignment: .center
             ), alignment: .center
         )
         

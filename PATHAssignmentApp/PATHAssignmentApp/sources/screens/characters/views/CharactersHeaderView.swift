@@ -9,14 +9,14 @@ import UIKit
 import LBTATools
 
 final class CharactersHeaderView: UITableViewHeaderFooterView {
-    private let headerLabel = Label(text: nil, type: .title3, weight: .bold, color: .tintPrimary, numberOfLines: 0)
+    private let headerLabel = Label(text: nil, type: .title3, weight: .bold, color: .tintPrimary)
     
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         
         headerLabel.addFillSuperview(
             superview: self,
-            padding: .linearSides(v: Sizing.space10pt, h: Sizing.space16pt)
+            padding: .linearSides(v: Space.pt10.value, h: Space.pt20.value)
         )
     }
     

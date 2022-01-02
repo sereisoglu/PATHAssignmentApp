@@ -39,6 +39,8 @@ final class CharactersController: UITableViewController {
         }
     }
     
+    private var timer: Timer?
+    
     private lazy var searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: nil)
         controller.searchBar.placeholder = "Search for characters"
@@ -78,6 +80,7 @@ final class CharactersController: UITableViewController {
         tableView.separatorStyle = .none
         
         tableView.registerHeader(CharactersHeaderView.self)
+        tableView.registerHeader(UITableViewHeaderFooterView.self)
         tableView.registerCell(CharactersCell.self)
         tableView.registerCell(InformingCell.self)
         tableView.registerFooter(FooterCell.self)
@@ -86,6 +89,11 @@ final class CharactersController: UITableViewController {
         searchResultsViewModel.delegate = self
         
         viewModel.fetchData()
+    }
+    
+    deinit {
+        timer?.invalidate()
+        timer = nil
     }
     
     required init?(coder: NSCoder) {
@@ -153,28 +161,30 @@ extension CharactersController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = tableView.dequeueReusableHeader() as CharactersHeaderView
-        
         switch state {
         case .default:
-            break
+            let header = tableView.dequeueReusableHeader()
+            
+            return header
         case .search:
+            let header = tableView.dequeueReusableHeader() as CharactersHeaderView
+            
             if let itemCount = viewModelData?.itemCount {
                 header.setData(text: "Search (\(itemCount))")
             } else {
                 header.setData(text: "Search")
             }
+            
+            return header
         }
-        
-        return header
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch state {
         case .default:
-            return .zero
+            return Space.pt10.value
         case .search:
-            return Sizing.space10pt + FontType.title3.value.lineHeight + Sizing.space10pt
+            return Space.pt10.value + FontType.title3.value.lineHeight + Space.pt10.value
         }
     }
 }
@@ -302,8 +312,22 @@ extension CharactersController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText == "" {
-            searchBarCancelButtonClicked(searchBar)
-        }
+        timer?.invalidate()
+        
+        timer = Timer.scheduledTimer(
+            withTimeInterval: 0.25,
+            repeats: false,
+            block: { [weak self] _ in
+                guard let self = self else {
+                    return
+                }
+                
+                if searchText == "" {
+                    self.searchBarCancelButtonClicked(searchBar)
+                } else {
+                    self.searchBarSearchButtonClicked(searchBar)
+                }
+            }
+        )
     }
 }

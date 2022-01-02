@@ -453,8 +453,8 @@
 			children = (
 				4A600EA62780BA2900C3FFC4 /* coordinators */,
 				4A600E9B27809F2F00C3FFC4 /* controllers */,
-				4A600E9C27809F3500C3FFC4 /* viewModels */,
 				4A600E9D27809F3A00C3FFC4 /* views */,
+				4A600E9C27809F3500C3FFC4 /* viewModels */,
 			);
 			path = charactersDetail;
 			sourceTree = "<group>";
