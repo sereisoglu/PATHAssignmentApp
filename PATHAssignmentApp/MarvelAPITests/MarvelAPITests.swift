@@ -10,24 +10,69 @@ import XCTest
 
 class MarvelAPITests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func test_Characters_Success() {
+        let expectation = expectation(description: #function)
+        
+        MarvelAPI.shared.request(
+            endpoint: .characters(query: nil),
+            page: 1
+        ) { (result: Result<ResultsModel<CharacterModel>?, ErrorModel>) in
+            switch result {
+            case .success(let data):
+                XCTAssertNotNil(data)
+                
+            case .failure(let error):
+                XCTAssertNil(error)
+            }
+            
+            expectation.fulfill()
         }
+        
+        waitForExpectations(timeout: 5, handler: nil)
+    }
+    
+    func test_Characters_Search_Success() {
+        let expectation = expectation(description: #function)
+        
+        MarvelAPI.shared.request(
+            endpoint: .characters(query: "iron man"),
+            page: 1
+        ) { (result: Result<ResultsModel<CharacterModel>?, ErrorModel>) in
+            switch result {
+            case .success(let data):
+                XCTAssertNotNil(data)
+                
+            case .failure(let error):
+                XCTAssertNil(error)
+            }
+            
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5, handler: nil)
+    }
+    
+    func test_Character_Comics_Success() {
+        let expectation = expectation(description: #function)
+        
+        MarvelAPI.shared.request(
+            endpoint: .characterComics(
+                id: 1009368,
+                lastDate: "2022-01-02"
+            )
+        ) { (result: Result<ResultsModel<ComicModel>?, ErrorModel>) in
+            switch result {
+            case .success(let data):
+                XCTAssertNotNil(data)
+                
+            case .failure(let error):
+                XCTAssertNil(error)
+            }
+            
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
 }
