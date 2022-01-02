@@ -22,7 +22,7 @@ final class CharactersDetailCell: UITableViewCell {
             photoImageView.withSize(.init(width: 120, height: 120)),
             stack(
                 nameLabel,
-                descriptionLabel, spacing: 10
+                descriptionLabel
             ), spacing: 20, alignment: .center
         ).withMargins(.linearSides(v: 20, h: 16))
     }

@@ -21,6 +21,10 @@ struct ComicModel: Decodable {
     }
     
     var date: String? {
-        dates?.first(where: { $0.type == "onsaleDate" })?.date
+        guard let dateString = dates?.first(where: { $0.type == "onsaleDate" })?.date else {
+            return nil
+        }
+        
+        return DateUtility.stringFormat(convertType: .monthAndDayAndYear, dateString: dateString)
     }
 }

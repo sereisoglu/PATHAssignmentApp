@@ -55,28 +55,31 @@ final class CharactersController: UITableViewController {
         self.searchResultsViewModel = searchResultsViewModel
         self.coordinator = coordinator
         
-        super.init(style: .grouped)
+        if #available(iOS 13.0, *) {
+            super.init(style: .insetGrouped)
+        } else {
+            super.init(style: .grouped)
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.title = "Characters"
+        navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
-        navigationController?.navigationBar.prefersLargeTitles = true
         
         view.backgroundColor = Color.backgroundDefault.value
         tableView.backgroundColor = Color.backgroundDefault.value
+        tableView.alwaysBounceVertical = true
+        tableView.keyboardDismissMode = .interactive
+        tableView.separatorStyle = .none
         
         tableView.registerHeader(CharactersHeaderView.self)
         tableView.registerCell(CharactersCell.self)
         tableView.registerCell(InformingCell.self)
         tableView.registerFooter(FooterCell.self)
-        
-        tableView.alwaysBounceVertical = true
-        tableView.keyboardDismissMode = .interactive
-        tableView.separatorStyle = .none
         
         viewModel.delegate = self
         searchResultsViewModel.delegate = self
@@ -129,7 +132,8 @@ extension CharactersController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let data = viewModelData?.items[safe: indexPath.item] else {
+        guard viewModelState == .data,
+              let data = viewModelData?.items[safe: indexPath.item] else {
             return
         }
         

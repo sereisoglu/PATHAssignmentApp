@@ -10,8 +10,10 @@ import LBTATools
 
 final class ComicsCell: UITableViewCell {
     private let photoImageView = PhotoImageView(cornerRadius: 6, borderWidth: 1)
-    private let nameLabel = Label(text: nil, type: .body1, weight: .bold, color: .tintPrimary, numberOfLines: 0)
-    private let descriptionLabel = Label(text: nil, type: .body2, weight: .medium, color: .tintSecondary, numberOfLines: 5)
+    private let nameLabel = Label(text: nil, type: .body1, weight: .medium, color: .tintPrimary, numberOfLines: 0)
+    private let dateLabel = Label(text: nil, type: .body2, weight: .medium, color: .tintSecondary, numberOfLines: 0)
+    private let descriptionLabel = Label(text: nil, type: .body2, weight: .medium, color: .tintTertiary, numberOfLines: 5)
+    private let iconView = IconImageView(size: .pt22, icon: .arrowUpForward, tintColor: .tintTertiary)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -22,8 +24,12 @@ final class ComicsCell: UITableViewCell {
             photoImageView.withSize(.init(width: 60, height: 90)),
             stack(
                 nameLabel,
+                dateLabel,
                 descriptionLabel
-            ), spacing: 10, alignment: .top
+            ),
+            hstack(
+                iconView
+            ).padTop(10), spacing: 10, alignment: .top
         ).withMargins(.linearSides(v: 11, h: 16))
     }
     
@@ -36,6 +42,7 @@ final class ComicsCell: UITableViewCell {
     func setData(
         imageUrl: String?,
         nameText: String,
+        dateText: String?,
         descriptionText: String?
     ) {
         if let imageUrl = imageUrl {
@@ -47,6 +54,14 @@ final class ComicsCell: UITableViewCell {
         }
         
         nameLabel.setData(text: nameText)
+        
+        if let dateText = dateText {
+            dateLabel.isHidden = false
+
+            dateLabel.setData(text: dateText)
+        } else {
+            dateLabel.isHidden = true
+        }
         
         if let descriptionText = descriptionText {
             descriptionLabel.isHidden = false

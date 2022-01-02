@@ -22,21 +22,20 @@ final class DateUtility {
         convertType: DateFormatType,
         dateString: String?
     ) -> String? {
-        guard var date = stringToDate(dateString) else {
+        guard let date = stringToDate(dateString) else {
             return nil
         }
         
-        date.addTimeInterval(TimeInterval(TimeZone(identifier: TimeZone.current.identifier)?.secondsFromGMT() ?? 0))
+        let dateFormatter = convertType.dateFormatter
         
-        let dateFormatter: DateFormatter
-        switch convertType {
-        case .iso8601:
-            dateFormatter = DateFormatter.formatIso8601
-        case .monthAndDayAndYear:
-            dateFormatter = DateFormatter.formatMonthAndDayAndYear
-        case .monthAndDayAndYearAndDayNameAndTime:
-            dateFormatter = DateFormatter.formatMonthAndDayAndYearAndDayNameAndTime
-        }
+        return dateFormatter.string(from: date)
+    }
+    
+    static func dateFormat(
+        convertType: DateFormatType,
+        date: Date
+    ) -> String {
+        let dateFormatter = convertType.dateFormatter
         
         return dateFormatter.string(from: date)
     }

@@ -12,7 +12,7 @@ final class CharactersCell: UITableViewCell {
     private let photoImageView = PhotoImageView(cornerRadius: 8, borderWidth: 1)
     private let nameLabel = Label(text: nil, type: .body1, weight: .bold, color: .tintPrimary, numberOfLines: 0)
     private let descriptionLabel = Label(text: nil, type: .body2, weight: .medium, color: .tintSecondary, numberOfLines: 5)
-    private let rightIconView = IconImageView(size: .pt22, icon: .chevronForward, tintColor: .tintTertiary)
+    private let iconView = IconImageView(size: .pt22, icon: .chevronForward, tintColor: .tintTertiary)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -26,7 +26,7 @@ final class CharactersCell: UITableViewCell {
                 descriptionLabel
             ),
             hstack(
-                rightIconView
+                iconView
             ).padTop(10), spacing: 10, alignment: .top
         ).withMargins(.linearSides(v: 11, h: 16))
     }

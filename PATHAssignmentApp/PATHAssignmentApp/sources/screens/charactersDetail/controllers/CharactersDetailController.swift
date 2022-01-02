@@ -13,7 +13,11 @@ final class CharactersDetailController: UITableViewController {
     init(viewModel: CharactersDetailViewModel) {
         self.viewModel = viewModel
         
-        super.init(style: .grouped)
+        if #available(iOS 13.0, *) {
+            super.init(style: .insetGrouped)
+        } else {
+            super.init(style: .grouped)
+        }
     }
     
     override func viewDidLoad() {
@@ -24,12 +28,14 @@ final class CharactersDetailController: UITableViewController {
         
         view.backgroundColor = Color.backgroundDefault.value
         tableView.backgroundColor = Color.backgroundDefault.value
+        tableView.alwaysBounceVertical = true
+        tableView.separatorStyle = .none
+        tableView.sectionFooterHeight = 20
+        tableView.sectionHeaderHeight = .zero
         
         tableView.registerCell(CharactersDetailCell.self)
         tableView.registerCell(ComicsCell.self)
-        
-        tableView.alwaysBounceVertical = true
-//        tableView.separatorStyle = .none
+        tableView.registerCell(InformingCell.self)
         
         setUpRightBarButtonItems()
         
@@ -71,67 +77,94 @@ final class CharactersDetailController: UITableViewController {
 
 extension CharactersDetailController {
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        switch viewModel.state {
+        case .data:
+            return 2
+        case .emptyOrError,
+             .loading:
+            return 1
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
+        switch viewModel.state {
+        case .data:
+            switch section {
+            case 0:
+                return 1
+            case 1:
+                return viewModel.comics?.count ?? 0
+            default:
+                return 0
+            }
+        case .emptyOrError,
+             .loading:
             return 1
-        case 1:
-            return viewModel.comics?.count ?? 0
-        default:
-            return 0
         }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0:
-            let cell = tableView.dequeueReusableCell(for: indexPath) as CharactersDetailCell
-            
-            cell.setData(
-                imageUrl: viewModel.data.thumbnail?.imageUrl,
-                nameText: viewModel.data.name ?? "No name",
-                descriptionText: viewModel.data.description
-            )
-            
-            return cell
-            
-        case 1:
-            let cell = tableView.dequeueReusableCell(for: indexPath) as ComicsCell
-            
-            if let data = viewModel.comics?[safe: indexPath.row] {
+        switch viewModel.state {
+        case .data:
+            switch indexPath.section {
+            case 0:
+                let cell = tableView.dequeueReusableCell(for: indexPath) as CharactersDetailCell
+                
                 cell.setData(
-                    imageUrl: data.thumbnail?.imageUrl,
-                    nameText: data.title ?? "No name",
-                    descriptionText: data.description
+                    imageUrl: viewModel.data.thumbnail?.imageUrl,
+                    nameText: viewModel.data.name ?? "No name",
+                    descriptionText: viewModel.data.description
                 )
+                
+                return cell
+                
+            case 1:
+                let cell = tableView.dequeueReusableCell(for: indexPath) as ComicsCell
+                
+                if let data = viewModel.comics?[safe: indexPath.row] {
+                    cell.setData(
+                        imageUrl: data.thumbnail?.imageUrl,
+                        nameText: data.title ?? "No name",
+                        dateText: data.date,
+                        descriptionText: data.description
+                    )
+                }
+                
+                return cell
+                
+            default:
+                return UITableViewCell()
             }
             
-            return cell
+        case .emptyOrError,
+             .loading:
+            let cell = tableView.dequeueReusableCell(for: indexPath) as InformingCell
             
-        default:
-            return UITableViewCell()
+            cell.setState(viewModel.state)
+            
+            return cell
         }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch indexPath.section {
-        case 1:
-            guard let urlString = viewModel.comics?[safe: indexPath.row]?.url else {
-                return
-            }
-            
-            BrowserUtility.openInsideOfApp(urlString: urlString, delegate: self)
-            
-        default:
+        guard viewModel.state == .data,
+              indexPath.section == 1,
+              let urlString = viewModel.comics?[safe: indexPath.row]?.url else {
             return
         }
+        
+        BrowserUtility.openInsideOfApp(urlString: urlString, delegate: self)
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
+        switch viewModel.state {
+        case .data:
+            return UITableView.automaticDimension
+            
+        case .emptyOrError,
+             .loading:
+            return 300
+        }
     }
 }
 
@@ -150,8 +183,8 @@ extension CharactersDetailController: CharactersDetailViewModelDelegate {
 
             return
         }
-
-//        tableView.separatorStyle = viewModelState == .data ? .singleLine : .none
+        
+        tableView.separatorStyle = viewModel.state == .data ? .singleLine : .none
 
         tableView.reloadData()
     }

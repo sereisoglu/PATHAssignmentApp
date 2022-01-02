@@ -10,7 +10,7 @@ import Alamofire
 
 public enum Endpoint: Equatable {
     case characters(query: String?)
-    case characterComics(id: Int)
+    case characterComics(id: Int, lastDate: String)
 }
 
 extension Endpoint {
@@ -27,7 +27,7 @@ extension Endpoint {
         case .characters:
             return "characters"
             
-        case .characterComics(let id):
+        case .characterComics(let id, _):
             return "characters/\(id)/comics"
         }
     }
@@ -70,7 +70,7 @@ extension Endpoint {
             
             return temp.compactMapValues { $0 }
             
-        case .characterComics:
+        case .characterComics(_, let lastDate):
             return [
                 "apikey": MarvelAPI.shared.PUBLIC_KEY,
                 "limit": 10,
@@ -78,7 +78,7 @@ extension Endpoint {
                 "hash": hash,
                 "format": "comic",
                 "formatType": "comic",
-                "dateRange": "2005-01-01,2022-01-01",
+                "dateRange": "2005-01-01,\(lastDate)",
                 "orderBy": "-onsaleDate"
             ]
         }

@@ -36,7 +36,10 @@ extension CharactersDetailViewModel {
         state = .loading
         
         MarvelAPI.shared.request(
-            endpoint: .characterComics(id: id)
+            endpoint: .characterComics(
+                id: id,
+                lastDate: DateUtility.dateFormat(convertType: .yearAndMonthAndDay, date: Date())
+            )
         ) { [weak self] (result: Result<ResultsModel<ComicModel>?, ErrorModel>) in
             guard let self = self else {
                 return
