@@ -9,10 +9,16 @@ import UIKit
 import MarvelAPI
 
 final class CharactersDetailController: UITableViewController {
-    private let viewModel: CharactersDetailViewModel
+    let viewModel: CharactersDetailViewModel
     
-    init(viewModel: CharactersDetailViewModel) {
+    weak var coordinator: CharactersDetailCoordinator?
+    
+    init(
+        viewModel: CharactersDetailViewModel,
+        coordinator: CharactersDetailCoordinator
+    ) {
         self.viewModel = viewModel
+        self.coordinator = coordinator
         
         if #available(iOS 13.0, *) {
             super.init(style: .insetGrouped)

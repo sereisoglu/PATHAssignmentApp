@@ -16,10 +16,10 @@ final class CharactersController: UITableViewController {
     
     private var state: State = .default
     
-    private let viewModel: CharactersViewModel
-    private let searchResultsViewModel: CharactersSearchResultsViewModel
+    let viewModel: CharactersViewModel
+    let searchResultsViewModel: CharactersSearchResultsViewModel
     
-    private let coordinator: CharactersCoordinator
+    weak var coordinator: CharactersCoordinator?
     
     private var viewModelState: InformingState {
         switch state {
@@ -146,7 +146,7 @@ extension CharactersController {
             return
         }
         
-        coordinator.goToDetail(data: data)
+        coordinator?.goToDetail(data: data)
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

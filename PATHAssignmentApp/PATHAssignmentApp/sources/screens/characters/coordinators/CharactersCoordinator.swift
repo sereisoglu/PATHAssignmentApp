@@ -8,7 +8,7 @@
 import UIKit
 import MarvelAPI
 
-final class CharactersCoordinator: Coordinator {
+final class CharactersCoordinator: NSObject, Coordinator, UINavigationControllerDelegate {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     
@@ -17,6 +17,8 @@ final class CharactersCoordinator: Coordinator {
     }
     
     func start() {
+        navigationController.delegate = self
+        
         let viewController = CharactersController(
             viewModel: .init(),
             searchResultsViewModel: .init(),
@@ -29,9 +31,20 @@ final class CharactersCoordinator: Coordinator {
     }
     
     func goToDetail(data: CharacterModel) {
-        let viewController = CharactersDetailController(
-            viewModel: .init(data: data)
-        )
-        navigationController.pushViewController(viewController, animated: true)
+        let childCoordinator = CharactersDetailCoordinator(navigationController: navigationController)
+        childCoordinator.parentCoordinator = self
+        childCoordinators.append(childCoordinator)
+        childCoordinator.start(data: data)
+    }
+    
+    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+        guard let fromViewController = navigationController.transitionCoordinator?.viewController(forKey: .from),
+              !navigationController.viewControllers.contains(fromViewController) else {
+            return
+        }
+        
+        if let charactersDetailController = fromViewController as? CharactersDetailController {
+            childCoordinatorDidFinish(childCoordinator: charactersDetailController.coordinator)
+        }
     }
 }
