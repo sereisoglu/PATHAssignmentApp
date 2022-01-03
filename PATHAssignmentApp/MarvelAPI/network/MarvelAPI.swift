@@ -42,7 +42,7 @@ public final class MarvelAPI {
             parameters?["offset"] = (page - 1) * PAGE_LIMIT
         }
         
-        print("\(endpoint.httpMethod.rawValue) url: \(endpoint.urlString)\nparameters: \(parameters ?? Parameters())\n")
+        print("\(endpoint.httpMethod.rawValue) \(endpoint.urlString)\nparameters: \(parameters ?? Parameters())\n")
         
         let dataRequest = AF.request(
             endpoint.urlString,

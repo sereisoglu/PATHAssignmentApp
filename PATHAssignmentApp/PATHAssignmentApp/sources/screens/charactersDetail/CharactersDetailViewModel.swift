@@ -16,8 +16,7 @@ final class CharactersDetailViewModel {
     weak var delegate: CharactersDetailViewModelDelegate?
     
     private(set) var data: CharacterModel
-    private(set) var comics: [ComicModel]?
-    private(set) var comicCount: Int?
+    private(set) var comics: ComicModels?
     
     private(set) var isFavorite: Bool = false
     
@@ -25,12 +24,43 @@ final class CharactersDetailViewModel {
     
     init(data: CharacterModel) {
         self.data = data
+        
+        if let id = data.id {
+            isFavorite = CoreDataManager.shared.characters[id] != nil
+        }
+    }
+}
+
+extension CharactersDetailViewModel {
+    func handleFavorite() {
+        if isFavorite {
+            if let id = data.id {
+                CoreDataManager.shared.deleteCharacter(id: id)
+            }
+        } else {
+            CoreDataManager.shared.createCharacter(
+                data: data,
+                comics: comics
+            )
+        }
+        
+        isFavorite.toggle()
     }
 }
 
 extension CharactersDetailViewModel {
     func fetchData() {
         guard let id = data.id else {
+            return
+        }
+        
+        if var items = CoreDataManager.shared.comics[id] {
+            items.sort(by: { DateUtility.stringToDate($0.date)?.compare(DateUtility.stringToDate($1.date) ?? Date()) == .orderedDescending })
+            
+            state = .data
+            comics = items
+            delegate?.getDataForCharactersDetailViewModel(error: nil)
+            
             return
         }
         
@@ -49,19 +79,16 @@ extension CharactersDetailViewModel {
             switch result {
             case .success(let data):
                 let items = data?.data?.results
-                let itemCount = data?.data?.total
                 
                 if items?.isNotEmpty ?? false {
                     self.state = .data
                     self.comics = items
-                    self.comicCount = itemCount
                 } else {
                     self.state = .emptyOrError(
                         headerText: "Empty",
                         messageText: "No characters"
                     )
                     self.comics = nil
-                    self.comicCount = nil
                 }
                 
                 self.delegate?.getDataForCharactersDetailViewModel(error: nil)

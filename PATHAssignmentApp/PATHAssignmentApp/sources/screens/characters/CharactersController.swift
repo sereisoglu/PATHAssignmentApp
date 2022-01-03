@@ -122,8 +122,8 @@ extension CharactersController {
             
             if let item = viewModelData?.items[safe: indexPath.item] {
                 cell.setData(
-                    imageUrl: item.thumbnail?.imageUrl,
-                    nameText: item.name ?? "No name",
+                    imageUrl: item.imageUrl,
+                    nameText: item.name,
                     descriptionText: item.description
                 )
             }

@@ -44,14 +44,12 @@ final class CharactersDetailController: UITableViewController {
         tableView.registerCell(ComicsCell.self)
         tableView.registerCell(InformingCell.self)
         
-        setUpRightBarButtonItems()
-        
         viewModel.delegate = self
         
         viewModel.fetchData()
     }
     
-    private func setUpRightBarButtonItems() {
+    private func setRightBarButtonItems() {
         navigationItem.rightBarButtonItems = [
             .init(
                 image: viewModel.isFavorite ? Icon.starFill.value : Icon.star.value,
@@ -64,15 +62,9 @@ final class CharactersDetailController: UITableViewController {
     
     @objc
     private func handleFavoriteButton() {
-//        isFavorite.toggle()
-//
-//        if isFavorite {
-//            CoreDataManager.shared.createNews(data: data)
-//        } else {
-//            CoreDataManager.shared.deleteNews(id: data.id)
-//        }
+        viewModel.handleFavorite()
         
-        setUpRightBarButtonItems()
+        setRightBarButtonItems()
     }
     
     required init?(coder: NSCoder) {
@@ -118,8 +110,8 @@ extension CharactersDetailController {
                 let cell = tableView.dequeueReusableCell(for: indexPath) as CharactersDetailCell
                 
                 cell.setData(
-                    imageUrl: viewModel.data.thumbnail?.imageUrl,
-                    nameText: viewModel.data.name ?? "No name",
+                    imageUrl: viewModel.data.imageUrl,
+                    nameText: viewModel.data.name,
                     descriptionText: viewModel.data.description
                 )
                 
@@ -130,8 +122,8 @@ extension CharactersDetailController {
                 
                 if let data = viewModel.comics?[safe: indexPath.row] {
                     cell.setData(
-                        imageUrl: data.thumbnail?.imageUrl,
-                        nameText: data.title ?? "No name",
+                        imageUrl: data.imageUrl,
+                        nameText: data.name,
                         dateText: DateUtility.stringFormat(convertType: .monthAndDayAndYear, dateString: data.date),
                         descriptionText: data.description
                     )
@@ -190,6 +182,8 @@ extension CharactersDetailController: CharactersDetailViewModelDelegate {
 
             return
         }
+        
+        setRightBarButtonItems()
         
         tableView.separatorStyle = viewModel.state == .data ? .singleLine : .none
 

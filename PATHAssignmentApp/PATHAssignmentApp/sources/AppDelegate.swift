@@ -16,6 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow()
         window?.makeKeyAndVisible()
         
+        CoreDataManager.shared.start()
+        
         MarvelAPI.shared.setUp(
             publicKey: "",
             privateKey: "",
@@ -25,5 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = TabBarController()
         
         return true
+    }
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        CoreDataManager.shared.saveContext()
     }
 }

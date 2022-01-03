@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20G165" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CharacterCDModel" representedClassName="CharacterCDModel" syncable="YES" codeGenerationType="class">
+        <attribute name="description_" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="imageUrl" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="comics" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ComicCDModel" inverseName="character" inverseEntity="ComicCDModel"/>
+    </entity>
+    <entity name="ComicCDModel" representedClassName="ComicCDModel" syncable="YES" codeGenerationType="class">
+        <attribute name="date" optional="YES" attributeType="String"/>
+        <attribute name="description_" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="imageUrl" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="url" optional="YES" attributeType="String"/>
+        <relationship name="character" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CharacterCDModel" inverseName="comics" inverseEntity="CharacterCDModel"/>
+    </entity>
+    <elements>
+        <element name="CharacterCDModel" positionX="-403.30078125" positionY="-88.0703125" width="128" height="104"/>
+        <element name="ComicCDModel" positionX="-54" positionY="9" width="128" height="134"/>
+    </elements>
+</model>

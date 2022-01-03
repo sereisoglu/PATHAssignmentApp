@@ -8,7 +8,7 @@
 import Foundation
 
 final class DateUtility {
-    static private func stringToDate(_ dateString: String?) -> Date? {
+    static func stringToDate(_ dateString: String?) -> Date? {
         guard let dateString = dateString else {
             return nil
         }
