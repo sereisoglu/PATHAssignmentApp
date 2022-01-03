@@ -19,8 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         CoreDataManager.shared.start()
         
         MarvelAPI.shared.setUp(
-            publicKey: "",
-            privateKey: "",
+            publicKey: "API_PUBLIC_KEY",
+            privateKey: "API_PRIVATE_KEY",
             pageLimit: 30
         )
         
